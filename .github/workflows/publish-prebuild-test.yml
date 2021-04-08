@@ -58,7 +58,7 @@ jobs:
         shell: bash
         env:
           cuda: "11.1"
-          cudnn: "8.1.0.77"
+          cudnn: "8.0.5.39"
         run: |
           source ./.github/workflows/scripts/install_cuda_ubuntu.sh
           if [[ $? -eq 0 ]]; then
