@@ -4,7 +4,7 @@
 
 TorchJS is a JS binding for PyTorch. Its primary objective is to allow running [TorchScript](https://pytorch.org/docs/master/jit.html) inside Node.js program. Complete binding of libtorch is possible but is out-of-scope at the moment.
 
-This fork is maintained by [Techainer](https://techainer.com).
+This fork is maintained by [Techainer](https://techainer.com)
 ## Changes after fork
 
 - Add support for `List` (Javascript `Array`), `Dict` (Javascript `Object`), `String`, `float` (Javascript `number`) as inputs and outputs.
