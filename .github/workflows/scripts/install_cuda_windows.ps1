@@ -10,6 +10,10 @@ $CUDA_KNOWN_URLS = @{
     "11.1.1" = "https://developer.download.nvidia.com/compute/cuda/11.1.1/network_installers/cuda_11.1.1_win10_network.exe"
 }
 
+$CUDNN_KNOWN_URLS = @{
+    "8.1.1.33" = "https://developer.nvidia.com/compute/machine-learning/cudnn/secure/8.1.1.33/11.2_20210301/cudnn-11.2-windows-x64-v8.1.1.33.zip"
+}
+
 # cuda_runtime.h is in nvcc <= 10.2, but cudart >= 11.0
 # @todo - make this easier to vary per CUDA version.
 $CUDA_PACKAGES_IN = @(
@@ -128,7 +132,17 @@ $CUDA_PATH_VX_Y = "CUDA_PATH_V$($CUDA_MAJOR)_$($CUDA_MINOR)"
 # Append $CUDA_PATH/bin to path.
 # Set CUDA_PATH as an environmental variable
 
-$CUDNN_ZIP_REMOTE = "http://developer.download.nvidia.com/compute/redist/cudnn/v$($CUDNN_MAJOR).$($CUDNN_MINOR).$($CUDNN_PATCH)/cudnn-$($CUDA_MAJOR).$($CUDA_MINOR)-windows-x64-v$($CUDNN_VERSION_FULL).zip"
+# Select the download link if known, otherwise have a guess.
+$CUDNN_ZIP_REMOTE=""
+if($CUDNN_KNOWN_URLS.containsKey($CUDNN_VERSION_FULL)){
+    $CUDNN_ZIP_REMOTE=$CUDNN_KNOWN_URLS[$CUDNN_VERSION_FULL]
+} else{
+    # Guess what the url is given the most recent pattern (at the time of writing, 10.1)
+    Write-Output "note: URL for CUDNN ${$CUDNN_VERSION_FULL} not known, estimating."
+    $CUDNN_ZIP_REMOTE = "http://developer.download.nvidia.com/compute/redist/cudnn/v$($CUDNN_MAJOR).$($CUDNN_MINOR).$($CUDNN_PATCH)/cudnn-$($CUDA_MAJOR).$($CUDA_MINOR)-windows-x64-v$($CUDNN_VERSION_FULL).zip"
+}
+
+
 $CUDNN_ZIP_LOCAL = Join-Path $TEMP_PATH "cudnn.zip"
 
 Write-Output "Downloading CUDNN zip for $($CUDNN_VERSION_FULL) from: $($CUDNN_ZIP_REMOTE)"
