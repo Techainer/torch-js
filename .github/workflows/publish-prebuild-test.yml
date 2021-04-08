@@ -32,16 +32,14 @@ jobs:
 
       - name: Install CUDA on windows-latest
         if: ${{ matrix.os == 'windows-latest' }}
-        defaults:
-          run:
-            working-directory: C:/torch-js
+        working-directory: C:/torch-js
         shell: powershell
         env:
           cuda: "11.1.1"
           cudnn: "8.0.5.39"
         run: |
           # Install CUDA via a powershell script
-          .\.github\workflows\scripts\install_cuda_windows.ps1
+          C:\torch-js\.github\workflows\scripts\install_cuda_windows.ps1
           if ($?) {
             # Set paths for subsequent steps, using $env:CUDA_PATH
             echo "Adding CUDA to CUDA_PATH, CUDA_PATH_X_Y and PATH"
@@ -98,14 +96,10 @@ jobs:
 
       - name: Install packages Windows
         if: ${{ matrix.os == 'windows-latest' }}
-        defaults:
-          run:
-            working-directory: C:/torch-js
+        working-directory: C:/torch-js
         run: yarn upgrade --dev
 
       - name: Prebuild Windows
         if: ${{ matrix.os == 'windows-latest' }}
-        defaults:
-          run:
-            working-directory: C:/torch-js
+        working-directory: C:/torch-js
         run: yarn build-prebuild
