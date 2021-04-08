@@ -1,6 +1,6 @@
 # TorchJS
 
-[![npm version](https://badge.fury.io/js/%40techainer1t%2Ftorch-js.svg)](https://badge.fury.io/js/%40techainer1t%2Ftorch-js)
+[![npm version](https://badge.fury.io/js/%40techainer1t%2Ftorch-js.svg)](https://badge.fury.io/js/%40techainer1t%2Ftorch-js) [![CI](https://github.com/Techainer/torch-js/actions/workflows/ci.yml/badge.svg)](https://github.com/Techainer/torch-js/actions/workflows/ci.yml) [![publish-prebuild](https://github.com/Techainer/torch-js/actions/workflows/publish-prebuild.yml/badge.svg)](https://github.com/Techainer/torch-js/actions/workflows/publish-prebuild.yml)
 
 TorchJS is a JS binding for PyTorch. Its primary objective is to allow running [TorchScript](https://pytorch.org/docs/master/jit.html) inside Node.js program. Complete binding of libtorch is possible but is out-of-scope at the moment.
 
