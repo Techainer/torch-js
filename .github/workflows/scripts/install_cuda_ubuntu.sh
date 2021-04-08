@@ -154,4 +154,4 @@ sudo apt-get install -y --no-install-recommends \
     libcudnn8=${CUDNN_VERSION}-1+cuda${CUDA_MAJOR}.${CUDA_MINOR} \
     libcudnn8-dev=${CUDNN_VERSION}-1+cuda${CUDA_MAJOR}.${CUDA_MINOR}
 
-sudo apt-mark hold libcudnn7
+# sudo apt-mark hold libcudnn7
