@@ -33,7 +33,7 @@ if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/build/libtorch/")
           file(DOWNLOAD ${DOWNLOAD_LINK} ${LIBTORCH_SAVE_PATH})
         else()
           set(DOWNLOAD_LINK
-              "https://download.pytorch.org/libtorch/cu${CUDA_VERSION_MAJOR}${CUDA_VERSION_MINOR}/libtorch-win-shared-with-deps-${TORCH_VERSION}%2Bcu${CUDA_VERSION_MAJOR}${CUDA_VERSION_MINOR}-.zip"
+              "https://download.pytorch.org/libtorch/cu${CUDA_VERSION_MAJOR}${CUDA_VERSION_MINOR}/libtorch-win-shared-with-deps-${TORCH_VERSION}%2Bcu${CUDA_VERSION_MAJOR}${CUDA_VERSION_MINOR}.zip"
           )
           message(
             STATUS "Downloading libtorch for Windows from ${DOWNLOAD_LINK}")
