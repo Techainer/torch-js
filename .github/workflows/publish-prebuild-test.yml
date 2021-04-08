@@ -27,6 +27,7 @@ jobs:
         run: |
           mkdir C:/torch-js
           git clone https://github.com/grische/blender.git C:/torch-js
+          cd C:/torch-js
           git checkout $GITHUB_SHA
 
       - name: Install CUDA on windows-latest
