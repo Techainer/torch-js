@@ -32,7 +32,9 @@ jobs:
 
       - name: Install CUDA on windows-latest
         if: ${{ matrix.os == 'windows-latest' }}
-        working-directory: C:/torch-js
+        defaults:
+          run:
+            working-directory: C:/torch-js
         shell: powershell
         env:
           cuda: "11.1.1"
@@ -96,10 +98,14 @@ jobs:
 
       - name: Install packages Windows
         if: ${{ matrix.os == 'windows-latest' }}
-        working-directory: C:/torch-js
+        defaults:
+          run:
+            working-directory: C:/torch-js
         run: yarn upgrade --dev
 
       - name: Prebuild Windows
         if: ${{ matrix.os == 'windows-latest' }}
-        working-directory: C:/torch-js
+        defaults:
+          run:
+            working-directory: C:/torch-js
         run: yarn build-prebuild
