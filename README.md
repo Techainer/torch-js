@@ -19,7 +19,7 @@ This fork is maintained by [Techainer](https://techainer.com).
 
 - Provide prebuild binary for cross NVIDIA GPU from Pascal to Ampere
 
-- Fixed some weird conversion arround List[Tensor] input.
+- Fixed some weird conversion arround `List[Tensor]` input.
 
 - Updated `libtorch` to `1.8.1` and `torchvision` to `0.9.1`
 
