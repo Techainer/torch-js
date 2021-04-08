@@ -54,6 +54,9 @@ jobs:
             echo "LD_LIBRARY_PATH=${CUDA_PATH}/lib:${LD_LIBRARY_PATH}" >> $GITHUB_ENV
           fi
 
+      - name: Free up 24GB of disk space
+        run: sudo rm -rf /usr/share/dotnet
+
       - name: Install node
         uses: actions/setup-node@v1
         with:
