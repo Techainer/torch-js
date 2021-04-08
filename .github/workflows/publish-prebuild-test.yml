@@ -28,7 +28,7 @@ jobs:
           mkdir C:/torch-js
           git clone https://github.com/Techainer/torch-js.git C:/torch-js
           cd C:/torch-js
-          git checkout $(GITHUB_SHA)
+          git checkout $($env:GITHUB_SHA)
           git status
           ls C:/torch-js
           echo "Fuck my life"
