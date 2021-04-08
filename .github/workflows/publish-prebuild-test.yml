@@ -25,7 +25,7 @@ jobs:
         if: ${{ matrix.os == 'windows-latest' }}
         shell: powershell
         env:
-          cuda: "11.0.2"
+          cuda: "11.1.1"
           cudnn: "8.0.5.39"
         run: |
           # Install CUDA via a powershell script
@@ -42,7 +42,7 @@ jobs:
         if: ${{ matrix.os == 'ubuntu-latest' }}
         shell: bash
         env:
-          cuda: "11.0"
+          cuda: "11.1"
           cudnn: "8.0.5.39"
         run: |
           source ./.github/workflows/scripts/install_cuda_ubuntu.sh
