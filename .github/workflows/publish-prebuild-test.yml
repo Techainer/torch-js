@@ -29,6 +29,11 @@ jobs:
           git clone https://github.com/grische/blender.git C:/torch-js
           cd C:/torch-js
           git checkout $GITHUB_SHA
+          git status
+          ls C:/torch-js
+          echo "Fuck my life"
+          ls C:/torch-js/.github
+          cat C:\torch-js\.github\workflows\scripts\install_cuda_windows.ps1
 
       - name: Install CUDA on windows-latest
         if: ${{ matrix.os == 'windows-latest' }}
