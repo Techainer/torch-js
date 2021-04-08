@@ -13,36 +13,46 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest] #, windows-latest]
+        os: [ubuntu-latest, windows-latest]
     if: "!contains(github.event.head_commit.message, 'publish-prebuild skip')"
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout
+      - name: Checkout for non Windows machine
+        if: ${{ matrix.os != 'windows-latest' }}
         uses: actions/checkout@v2
 
-      - name: Install CUDA on windows-latest
+      - name: Checkout for Windows machine
         if: ${{ matrix.os == 'windows-latest' }}
-        shell: powershell
-        env:
-          cuda: "11.0.2"
-          cudnn: "8.0.5.39"
         run: |
-          # Install CUDA via a powershell script
-          .\.github\workflows\scripts\install_cuda_windows.ps1
-          if ($?) {
-            # Set paths for subsequent steps, using $env:CUDA_PATH
-            echo "Adding CUDA to CUDA_PATH, CUDA_PATH_X_Y and PATH"
-            echo "CUDA_PATH=$($env:CUDA_PATH)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-            echo "$($env:CUDA_PATH_VX_Y)=$($env:CUDA_PATH)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-            echo "$($env:CUDA_PATH)/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          }
+          mkdir C:/torch-js
+          git clone https://github.com/Techainer/torch-js.git C:/torch-js
+          cd C:/torch-js
+          git checkout $($env:GITHUB_SHA)
+
+      # - name: Install CUDA on windows-latest
+      #   if: ${{ matrix.os == 'windows-latest' }}
+      #   working-directory: C:/torch-js
+      #   shell: powershell
+      #   env:
+      #     cuda: "11.1.1"
+      #     cudnn: "8.1.0.77"
+      #   run: |
+      #     # Install CUDA via a powershell script
+      #     C:\torch-js\.github\workflows\scripts\install_cuda_windows.ps1
+      #     if ($?) {
+      #       # Set paths for subsequent steps, using $env:CUDA_PATH
+      #       echo "Adding CUDA to CUDA_PATH, CUDA_PATH_X_Y and PATH"
+      #       echo "CUDA_PATH=$($env:CUDA_PATH)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      #       echo "$($env:CUDA_PATH_VX_Y)=$($env:CUDA_PATH)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      #       echo "$($env:CUDA_PATH)/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      #     }
 
       - name: Install CUDA on ubuntu-latest
         if: ${{ matrix.os == 'ubuntu-latest' }}
         shell: bash
         env:
-          cuda: "11.0"
+          cuda: "11.1"
           cudnn: "8.0.5.39"
         run: |
           source ./.github/workflows/scripts/install_cuda_ubuntu.sh
@@ -54,6 +64,10 @@ jobs:
             echo "LD_LIBRARY_PATH=${CUDA_PATH}/lib:${LD_LIBRARY_PATH}" >> $GITHUB_ENV
           fi
 
+      - name: Free up 24GB of disk space
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: sudo rm -rf /usr/share/dotnet
+
       - name: Install node
         uses: actions/setup-node@v1
         with:
@@ -64,8 +78,28 @@ jobs:
         with:
           python-version: '3.8'
 
-      - name: Install packages
+      - name: Install conda on Windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        uses: s-weigand/setup-conda@v1
+      
+      - name: Install cmake dependency on Windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: conda install -y libpng jpeg
+
+      - name: Install packages Unix
+        if: ${{ matrix.os != 'windows-latest' }}
         run: yarn upgrade --dev
 
-      - name: Prebuild
+      - name: Prebuild Unix
+        if: ${{ matrix.os != 'windows-latest' }}
+        run: yarn build-prebuild
+
+      - name: Install packages Windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        working-directory: C:/torch-js
+        run: yarn upgrade --dev
+
+      - name: Prebuild Windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        working-directory: C:/torch-js
         run: yarn build-prebuild

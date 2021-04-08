@@ -6,7 +6,12 @@
 $CUDA_KNOWN_URLS = @{
     "10.1.243" = "https://developer.download.nvidia.com/compute/cuda/10.1/Prod/network_installers/cuda_10.1.243_win10_network.exe";
     "10.2.89" = "https://developer.download.nvidia.com/compute/cuda/10.2/Prod/network_installers/cuda_10.2.89_win10_network.exe";
-    "11.0.2" = "https://developer.download.nvidia.com/compute/cuda/11.0.2/network_installers/cuda_11.0.2_win10_network.exe"
+    "11.0.2" = "https://developer.download.nvidia.com/compute/cuda/11.0.2/network_installers/cuda_11.0.2_win10_network.exe";
+    "11.1.1" = "https://developer.download.nvidia.com/compute/cuda/11.1.1/network_installers/cuda_11.1.1_win10_network.exe"
+}
+
+$CUDNN_KNOWN_URLS = @{
+    "8.1.0.77" = "http://developer.download.nvidia.com/compute/redist/cudnn/v8.1.0/cudnn-11.2-windows-x64-v8.1.0.77.zip"
 }
 
 # cuda_runtime.h is in nvcc <= 10.2, but cudart >= 11.0
@@ -89,7 +94,7 @@ if($CUDA_KNOWN_URLS.containsKey($CUDA_VERSION_FULL)){
 } else{
     # Guess what the url is given the most recent pattern (at the time of writing, 10.1)
     Write-Output "note: URL for CUDA ${$CUDA_VERSION_FULL} not known, estimating."
-    $CUDA_REPO_PKG_REMOTE="http://developer.download.nvidia.com/compute/cuda/$($CUDA_MAJOR).$($CUDA_MINOR)/Prod/network_installers/cuda_$($CUDA_VERSION_FULL)_win10_network.exe"
+    $CUDA_REPO_PKG_REMOTE="http://developer.download.nvidia.com/compute/cuda/$($CUDA_VERSION_FULL)/network_installers/cuda_$($CUDA_VERSION_FULL)_win10_network.exe"
 }
 $TEMP_PATH = [System.IO.Path]::GetTempPath()
 $CUDA_REPO_PKG_LOCAL = Join-Path $TEMP_PATH "cuda_$($CUDA_VERSION_FULL)_win10_network.exe"
@@ -127,7 +132,17 @@ $CUDA_PATH_VX_Y = "CUDA_PATH_V$($CUDA_MAJOR)_$($CUDA_MINOR)"
 # Append $CUDA_PATH/bin to path.
 # Set CUDA_PATH as an environmental variable
 
-$CUDNN_ZIP_REMOTE = "http://developer.download.nvidia.com/compute/redist/cudnn/v$($CUDNN_MAJOR).$($CUDNN_MINOR).$($CUDNN_PATCH)/cudnn-$($CUDA_MAJOR).$($CUDA_MINOR)-windows-x64-v$($CUDNN_VERSION_FULL).zip"
+# Select the download link if known, otherwise have a guess.
+$CUDNN_ZIP_REMOTE=""
+if($CUDNN_KNOWN_URLS.containsKey($CUDNN_VERSION_FULL)){
+    $CUDNN_ZIP_REMOTE=$CUDNN_KNOWN_URLS[$CUDNN_VERSION_FULL]
+} else{
+    # Guess what the url is given the most recent pattern (at the time of writing, 10.1)
+    Write-Output "note: URL for CUDNN ${$CUDNN_VERSION_FULL} not known, estimating."
+    $CUDNN_ZIP_REMOTE = "http://developer.download.nvidia.com/compute/redist/cudnn/v$($CUDNN_MAJOR).$($CUDNN_MINOR).$($CUDNN_PATCH)/cudnn-$($CUDA_MAJOR).$($CUDA_MINOR)-windows-x64-v$($CUDNN_VERSION_FULL).zip"
+}
+
+
 $CUDNN_ZIP_LOCAL = Join-Path $TEMP_PATH "cudnn.zip"
 
 Write-Output "Downloading CUDNN zip for $($CUDNN_VERSION_FULL) from: $($CUDNN_ZIP_REMOTE)"
