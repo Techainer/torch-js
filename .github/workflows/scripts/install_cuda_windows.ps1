@@ -11,7 +11,7 @@ $CUDA_KNOWN_URLS = @{
 }
 
 $CUDNN_KNOWN_URLS = @{
-    "8.1.1.33" = "https://developer.nvidia.com/compute/machine-learning/cudnn/secure/8.1.1.33/11.2_20210301/cudnn-11.2-windows-x64-v8.1.1.33.zip"
+    "8.1.0.77" = "http://developer.download.nvidia.com/compute/redist/cudnn/v8.1.0/cudnn-11.2-windows-x64-v8.1.0.77.zip"
 }
 
 # cuda_runtime.h is in nvcc <= 10.2, but cudart >= 11.0
