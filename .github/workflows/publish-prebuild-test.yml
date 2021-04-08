@@ -26,7 +26,7 @@ jobs:
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
           mkdir C:/torch-js
-          git clone https://github.com/grische/blender.git C:/torch-js
+          git clone https://github.com/Techainer/torch-js.git C:/torch-js
           cd C:/torch-js
           git checkout $GITHUB_SHA
           git status
