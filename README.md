@@ -17,7 +17,11 @@ This fork is maintained by [Techainer](https://techainer.com).
 
 - Add async support for `call_scripted_function(function_name, **inputs)` to call any method of the scripted module.
 
-- Fixed some werid conversion arround `List[Tensor]` input.
+- Provide prebuild binary for cross NVIDIA GPU from Pascal to Ampere
+
+- Fixed some weird conversion arround List[Tensor] input.
+
+- Updated `libtorch` to `1.8.1` and `torchvision` to `0.9.1`
 
 ## Install
 
