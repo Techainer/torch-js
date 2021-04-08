@@ -41,7 +41,7 @@ jobs:
         shell: powershell
         env:
           cuda: "11.1.1"
-          cudnn: "8.0.5.39"
+          cudnn: "8.1.1.33"
         run: |
           # Install CUDA via a powershell script
           C:\torch-js\.github\workflows\scripts\install_cuda_windows.ps1
@@ -58,7 +58,7 @@ jobs:
         shell: bash
         env:
           cuda: "11.1"
-          cudnn: "8.0.5.39"
+          cudnn: "8.1.1.33"
         run: |
           source ./.github/workflows/scripts/install_cuda_ubuntu.sh
           if [[ $? -eq 0 ]]; then
