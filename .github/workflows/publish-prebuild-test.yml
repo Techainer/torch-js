@@ -18,11 +18,20 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout
+      - name: Checkout for non Windows machine
+        if: ${{ matrix.os != 'windows-latest' }}
         uses: actions/checkout@v2
+
+      - name: Checkout for Windows machine
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: |
+          mkdir C:/torch-js
+          git clone https://github.com/grische/blender.git C:/torch-js
+          git checkout $GITHUB_SHA
 
       - name: Install CUDA on windows-latest
         if: ${{ matrix.os == 'windows-latest' }}
+        working-directory: C:/torch-js
         shell: powershell
         env:
           cuda: "11.1.1"
@@ -55,6 +64,7 @@ jobs:
           fi
 
       - name: Free up 24GB of disk space
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: sudo rm -rf /usr/share/dotnet
 
       - name: Install node
@@ -75,8 +85,20 @@ jobs:
         if: ${{ matrix.os == 'windows-latest' }}
         run: conda install -y libpng jpeg
 
-      - name: Install packages
+      - name: Install packages Unix
+        if: ${{ matrix.os != 'windows-latest' }}
         run: yarn upgrade --dev
 
-      - name: Prebuild
+      - name: Prebuild Unix
+        if: ${{ matrix.os != 'windows-latest' }}
+        run: yarn build-prebuild
+
+      - name: Install packages Windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        working-directory: C:/torch-js
+        run: yarn upgrade --dev
+
+      - name: Prebuild Windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        working-directory: C:/torch-js
         run: yarn build-prebuild
