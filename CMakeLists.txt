@@ -134,6 +134,9 @@ if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/torchvision")
   string(REPLACE "v" "" TORCHVISON_VERSION_NUM_ONLY ${TORCHVISION_VERSION})
   execute_process(COMMAND mv ${CMAKE_CURRENT_BINARY_DIR}/vision-${TORCHVISON_VERSION_NUM_ONLY} ${CMAKE_CURRENT_BINARY_DIR}/vision)
   message(STATUS "Compliling torchvision")
+
+
+
   if(CUDA_FOUND)
     # patch torchvision with a proper CUDA_ARCHITECTURES list like:
     # set_property(TARGET torchvision PROPERTY CUDA_ARCHITECTURES 60 61 62 70 72 75 80 86)
@@ -146,7 +149,7 @@ if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/torchvision")
         COMMAND
           sed -i "103 i set_property(TARGET torchvision PROPERTY CUDA_ARCHITECTURES 60 61 62 70 72 75 80 86)" "${CMAKE_CURRENT_BINARY_DIR}/vision/CMakeLists.txt")
     endif()
-        execute_process(
+    execute_process(
       COMMAND
         ${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE=Release -DWITH_CUDA=${CUDA_FOUND}
         -DCMAKE_PREFIX_PATH=${CMAKE_CURRENT_BINARY_DIR}/libtorch
@@ -154,19 +157,22 @@ if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/torchvision")
         "${CMAKE_CURRENT_BINARY_DIR}/vision/" -B
         "${CMAKE_CURRENT_BINARY_DIR}/vision/build/"
       COMMAND_ECHO
-        STDOUT
-      )
+      STDOUT
+    )
   else()
     execute_process(
       COMMAND
         ${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE=Release -DWITH_CUDA=${CUDA_FOUND}
         -DCMAKE_PREFIX_PATH=${CMAKE_CURRENT_BINARY_DIR}/libtorch -S
         "${CMAKE_CURRENT_BINARY_DIR}/vision/" -B
-        "${CMAKE_CURRENT_BINARY_DIR}/vision/build/")
+        "${CMAKE_CURRENT_BINARY_DIR}/vision/build/"
+      COMMAND_ECHO
+      STDOUT
+    )
   endif()
   execute_process(
     COMMAND ${CMAKE_COMMAND} --build "${CMAKE_CURRENT_BINARY_DIR}/vision/build"
-            --config Release -j${PROCESSOR_COUNT})
+            --config Release)
   execute_process(
     COMMAND
       ${CMAKE_COMMAND} --install "${CMAKE_CURRENT_BINARY_DIR}/vision/build"
